@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#DBDDE2"
-    tools:context=".SaveFragment">
+    tools:context=".fragments.SaveFragment">
 
     <TextView
         android:id="@+id/text_save"
