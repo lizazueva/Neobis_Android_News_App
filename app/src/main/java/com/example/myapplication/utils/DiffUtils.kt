@@ -1,7 +1,7 @@
 package com.example.myapplication.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.myapplication.retrofit.News
+import com.example.myapplication.model.News
 
 class DiffUtils(val oldList: List<News>, val newList: List<News>): DiffUtil.Callback() {
     override fun getOldListSize(): Int {

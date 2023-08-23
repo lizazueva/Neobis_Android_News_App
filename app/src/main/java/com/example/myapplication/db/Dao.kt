@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.myapplication.retrofit.News
+import com.example.myapplication.model.News
 
 @Dao
 interface Dao {
@@ -12,6 +12,6 @@ interface Dao {
     suspend fun insert(news: News)
 
     @Query("SELECT*FROM news")
-    suspend fun getAllNews(): LiveData<List<News>>
+    fun getAllNews(): LiveData<List<News>>
 
 }

@@ -1,6 +1,5 @@
-package com.example.myapplication.retrofit
+package com.example.myapplication.model
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters

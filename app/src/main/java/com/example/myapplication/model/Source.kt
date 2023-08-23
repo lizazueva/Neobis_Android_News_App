@@ -1,4 +1,4 @@
-package com.example.myapplication.retrofit
+package com.example.myapplication.model
 
 data class Source(
     val id: String,

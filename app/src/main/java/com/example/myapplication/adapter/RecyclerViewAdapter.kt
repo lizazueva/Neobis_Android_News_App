@@ -1,22 +1,27 @@
 package com.example.myapplication.adapter
 
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ItemBinding
-import com.example.myapplication.retrofit.News
+import com.example.myapplication.model.News
 import com.example.myapplication.utils.DiffUtils
 
-class RecyclerViewAdapter (var news: List<News>, val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerViewAdapter (val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+
+    private var newsList: List<News> = emptyList()
 
     interface OnItemClickListener {
-        fun onItemClick(product: News)
+        fun onItemClick(news: News)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         lateinit var binding: ItemBinding
@@ -31,32 +36,24 @@ class RecyclerViewAdapter (var news: List<News>, val listener: OnItemClickListen
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = news[position]
-        Glide.with(holder.image).load(currentItem.urlToImage).into(holder.image)
-        holder.title.text = currentItem.title
-        holder.author.text = currentItem.author
-        holder.discription.text = currentItem.description
-        holder.date.text = currentItem.publishedAt
-        holder.cardItem.setOnClickListener {
-            listener.onItemClick(news[position])
-        }
+        holder.bind(newsList[position], position, 50)
     }
 
     class ViewHolder(private val binding: ItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val image: ImageView = binding.imageNews
-        val title: TextView = binding.textTitle
-        val author: TextView = binding.textAuthor
-        val discription: TextView = binding.textDescription
-        val date: TextView = binding.textDate
-        val cardItem: CardView = binding.cardNews
+        fun bind(news: News, position: Int, size: Int) = with(binding) {
+            Glide.with(binding.imageNews).load(news.urlToImage).into(binding.imageNews)
+            textTitle.text = news.title
+            textAuthor.text = news.author
+            textDescription.text = news.description
+            textDate.text = news.publishedAt
 
-
+        }
     }
-
-    fun setData(newList: List<News>){
-        val diffUtil = DiffUtils(news, newList)
+    fun setData(newList: List<News>) {
+        val diffUtil = DiffUtils(newsList, newList)
         val diffResult = DiffUtil.calculateDiff(diffUtil)
+        this.newsList = newList
         diffResult.dispatchUpdatesTo(this)
     }
 }

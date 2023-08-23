@@ -1,6 +1,4 @@
-package com.example.myapplication.retrofit
-
-import com.example.myapplication.retrofit.News
+package com.example.myapplication.model
 
 data class NewsResponse(
     val articles: List<News>,
