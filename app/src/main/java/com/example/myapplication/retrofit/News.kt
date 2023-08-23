@@ -1,10 +1,17 @@
 package com.example.myapplication.retrofit
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.myapplication.db.Converters
 
 
+@Entity("news")
+@TypeConverters(Converters::class)
 data class News(
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
     val author: String,
     val content: String,
     val description: String,
