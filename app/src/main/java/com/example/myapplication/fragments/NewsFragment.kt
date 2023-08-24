@@ -6,18 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.RecyclerViewAdapter
 import com.example.myapplication.databinding.FragmentNewsBinding
-import com.example.myapplication.model.News
 import com.example.myapplication.utils.Resource
 import com.example.myapplication.viewModel.MyViewModel
-import com.example.myapplication.viewModel.ViewModelProviderFactory
 
 class NewsFragment : Fragment(){
 
@@ -55,6 +53,24 @@ class NewsFragment : Fragment(){
             val action = NewsFragmentDirections.actionNewsFragmentToDetailFragment(news)
             findNavController().navigate(action)
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    if (it.isEmpty()) {
+                        reload()
+                    } else {
+                        viewModelNewsFragment.searchNews(it)
+                        observerSearch()
+                    }
+                }
+                return true
+            }
+        })
     }
 
 
@@ -71,6 +87,28 @@ class NewsFragment : Fragment(){
                     response.data?.let {newsResponse ->
                         adapter.differ.submitList(newsResponse.articles)
 //                        adapter.notifyItemRangeChanged(0, newsResponse.articles.size)
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let{message->
+                        Log.e(TAG, "Error: $message")
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
+    }
+
+    private fun observerSearch(){
+        viewModelNewsFragment.searchNews.observe(viewLifecycleOwner, Observer {response ->
+            when (response){
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let {newsResponse ->
+                        adapter.differ.submitList(newsResponse.articles)
                     }
                 }
                 is Resource.Error -> {
