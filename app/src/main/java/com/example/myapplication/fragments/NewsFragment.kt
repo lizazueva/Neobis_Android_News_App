@@ -41,12 +41,19 @@ class NewsFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModelNewsFragment = (activity as MainActivity).myViewModel
+
+
         observer()
+
         binding.imageRenew.setOnClickListener{
             reload()
         }
         binding.imageLike.setOnClickListener {
             findNavController().navigate(R.id.action_newsFragment_to_saveFragment2)
+        }
+        adapter.setOnClickListener {news ->
+            val action = NewsFragmentDirections.actionNewsFragmentToDetailFragment(news)
+            findNavController().navigate(action)
         }
     }
 
