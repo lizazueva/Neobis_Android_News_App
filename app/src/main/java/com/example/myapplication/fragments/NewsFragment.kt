@@ -19,11 +19,11 @@ import com.example.myapplication.utils.Resource
 import com.example.myapplication.viewModel.MyViewModel
 import com.example.myapplication.viewModel.ViewModelProviderFactory
 
-class NewsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
+class NewsFragment : Fragment(){
 
     private lateinit var binding: FragmentNewsBinding
     private lateinit var adapter: RecyclerViewAdapter
-    private lateinit var myViewModel1: MyViewModel
+    lateinit var viewModelNewsFragment: MyViewModel
     val TAG = "NewsFragment"
 
 
@@ -33,31 +33,37 @@ class NewsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
     ): View? {
         binding = FragmentNewsBinding.inflate(inflater, container, false)
         binding.recyclerNews.layoutManager = LinearLayoutManager(requireContext())
-        adapter = RecyclerViewAdapter(this)
+        adapter = RecyclerViewAdapter()
         binding.recyclerNews.adapter = adapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myViewModel1 = (activity as MainActivity).myViewModel
-//        myViewModel = ViewModelProvider(requireActivity()).get(MyViewModel::class.java)
-
+        viewModelNewsFragment = (activity as MainActivity).myViewModel
         observer()
+        binding.imageRenew.setOnClickListener{
+            reload()
+        }
+        binding.imageLike.setOnClickListener {
+            findNavController().navigate(R.id.action_newsFragment_to_saveFragment2)
+        }
     }
 
-    override fun onItemClick(news: News) {
 
-        findNavController().navigate(R.id.action_newsFragment_to_detailFragment)
+    private fun reload(){
+        adapter.differ.submitList(listOf())
+        viewModelNewsFragment.getNews("us")
     }
 
     private fun observer(){
-        myViewModel1.news.observe(viewLifecycleOwner, Observer {response ->
+        viewModelNewsFragment.news.observe(viewLifecycleOwner, Observer {response ->
             when (response){
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let {newsResponse ->
-                        adapter.setData(newsResponse.articles)
+                        adapter.differ.submitList(newsResponse.articles)
+//                        adapter.notifyItemRangeChanged(0, newsResponse.articles.size)
                     }
                 }
                 is Resource.Error -> {
@@ -67,12 +73,16 @@ class NewsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
                     }
                 }
                 is Resource.Loading -> {
-                    hideProgressBar()
+                    showProgressBar()
                 }
             }
         })
     }
     private  fun hideProgressBar(){
         binding.progressBar.visibility = View.INVISIBLE
+    }
+
+    private  fun showProgressBar(){
+        binding.progressBar.visibility = View.VISIBLE
     }
 }

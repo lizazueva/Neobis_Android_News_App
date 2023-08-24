@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_newsFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_newsFragment_to_saveFragment2"
+            app:destination="@id/saveFragment2" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -21,6 +24,15 @@
         tools:layout="@layout/fragment_detail" >
         <action
             android:id="@+id/action_detailFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/saveFragment2"
+        android:name="com.example.myapplication.fragments.SaveFragment"
+        android:label="fragment_save"
+        tools:layout="@layout/fragment_save" >
+        <action
+            android:id="@+id/action_saveFragment2_to_newsFragment"
             app:destination="@id/newsFragment" />
     </fragment>
 </navigation>

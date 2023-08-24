@@ -1,59 +1,65 @@
 package com.example.myapplication.adapter
 
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ItemBinding
 import com.example.myapplication.model.News
-import com.example.myapplication.utils.DiffUtils
 
-class RecyclerViewAdapter (val listener: OnItemClickListener) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
-    private var newsList: List<News> = emptyList()
+    private var onItemClickListener: ((News)-> Unit)? = null
 
-    interface OnItemClickListener {
-        fun onItemClick(news: News)
+    fun setOnClickListener(listener: (News)-> Unit){
+        onItemClickListener = listener
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        lateinit var binding: ItemBinding
-        binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
 
     }
 
-
     override fun getItemCount(): Int {
-        return 50
+        return differ.currentList.size
+    }
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(newsList[position], position, 50)
-    }
-
-    class ViewHolder(private val binding: ItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(news: News, position: Int, size: Int) = with(binding) {
-            Glide.with(binding.imageNews).load(news.urlToImage).into(binding.imageNews)
+        val news = differ.currentList[position]
+        with(holder.binding) {
+            Glide.with(imageNews).load(news.urlToImage).into(imageNews)
             textTitle.text = news.title
             textAuthor.text = news.author
             textDescription.text = news.description
             textDate.text = news.publishedAt
-
+            holder.itemView.setOnClickListener{
+                onItemClickListener?.let {
+                    it(news)
+                }
+            }
         }
     }
-    fun setData(newList: List<News>) {
-        val diffUtil = DiffUtils(newsList, newList)
-        val diffResult = DiffUtil.calculateDiff(diffUtil)
-        this.newsList = newList
-        diffResult.dispatchUpdatesTo(this)
+
+    inner class ViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+
+    //установка differ(можно использовать вместо отдельного класса)
+    private val differCallback = object : DiffUtil.ItemCallback<News>(){
+        override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
+            return  oldItem.url == newItem.url
+        }
+
+        override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {
+            return oldItem== newItem
+        }
+
     }
+     val differ = AsyncListDiffer(this, differCallback)
+
 }

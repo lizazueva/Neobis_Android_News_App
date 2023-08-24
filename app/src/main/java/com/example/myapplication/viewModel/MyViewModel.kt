@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.db.NewsRepository
+import com.example.myapplication.model.News
 import com.example.myapplication.model.NewsResponse
 import com.example.myapplication.utils.Resource
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
     }
 
 
-    private fun getNews(country: String){
+    fun getNews(country: String){
         viewModelScope.launch {
             news.postValue(Resource.Loading())
             val response = newsRepository.getNews(country, page)
@@ -34,5 +35,9 @@ class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
             }
         }
         return Resource.Error(response.message())
+    }
+
+    fun save(news: News) = viewModelScope.launch {
+        newsRepository.insertNews(news)
     }
 }
