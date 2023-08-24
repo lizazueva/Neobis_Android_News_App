@@ -9,7 +9,7 @@ import com.example.myapplication.utils.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class MyViewModel(var newsRepository: NewsRepository): ViewModel() {
+class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
     val news: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     val page:Int = 1
 

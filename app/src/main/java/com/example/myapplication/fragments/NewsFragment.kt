@@ -23,7 +23,7 @@ class NewsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentNewsBinding
     private lateinit var adapter: RecyclerViewAdapter
-    private lateinit var myViewModel: MyViewModel
+    private lateinit var myViewModel1: MyViewModel
     val TAG = "NewsFragment"
 
 
@@ -40,8 +40,8 @@ class NewsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        myViewModel = (activity as MainActivity).myViewModel
-        myViewModel = ViewModelProvider(requireActivity()).get(MyViewModel::class.java)
+        myViewModel1 = (activity as MainActivity).myViewModel
+//        myViewModel = ViewModelProvider(requireActivity()).get(MyViewModel::class.java)
 
         observer()
     }
@@ -52,7 +52,7 @@ class NewsFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
     }
 
     private fun observer(){
-        myViewModel.news.observe(viewLifecycleOwner, Observer {response ->
+        myViewModel1.news.observe(viewLifecycleOwner, Observer {response ->
             when (response){
                 is Resource.Success -> {
                     hideProgressBar()
