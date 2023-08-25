@@ -10,7 +10,7 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.model.News
 
 
-@Database(entities = [News::class], version = 1)
+@Database(entities = [News::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class DataBase: RoomDatabase() {
     abstract fun getDao(): Dao
@@ -23,12 +23,14 @@ abstract class DataBase: RoomDatabase() {
         operator fun invoke(context: MainActivity) = instance ?: synchronized(LOCK){
             instance ?: createDatabase(context).also { instance = it}
         }
-        private fun createDatabase(context: Context): DataBase{
+        fun createDatabase(context: Context): DataBase{
             return Room.databaseBuilder(
                 context.applicationContext,
                 DataBase::class.java,
                 "item_database"
-            ).build()
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

@@ -7,6 +7,7 @@ import com.example.myapplication.db.NewsRepository
 import com.example.myapplication.model.News
 import com.example.myapplication.model.NewsResponse
 import com.example.myapplication.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -16,6 +17,7 @@ class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
 
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     val searchPage:Int = 1
+
 
     init {
         getNews("us")
@@ -56,7 +58,10 @@ class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
         return Resource.Error(response.message())
     }
 
-    fun save(news: News) = viewModelScope.launch {
+    fun save(news: News) = viewModelScope.launch (Dispatchers.IO) {
         newsRepository.insertNews(news)
     }
+
+    fun getSaveNews() =
+        newsRepository.getSaveNews()
 }

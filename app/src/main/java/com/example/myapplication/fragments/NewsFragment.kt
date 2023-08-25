@@ -86,7 +86,6 @@ class NewsFragment : Fragment(){
                     hideProgressBar()
                     response.data?.let {newsResponse ->
                         adapter.differ.submitList(newsResponse.articles)
-//                        adapter.notifyItemRangeChanged(0, newsResponse.articles.size)
                     }
                 }
                 is Resource.Error -> {
