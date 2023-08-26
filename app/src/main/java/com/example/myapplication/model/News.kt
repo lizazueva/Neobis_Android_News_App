@@ -16,5 +16,6 @@ data class News(
     val source: Source? = null,
     val title: String,
     val url: String,
-    val urlToImage: String) : java.io.Serializable {
+    val urlToImage: String,
+    var isSaved: Boolean = false) : java.io.Serializable {
 }

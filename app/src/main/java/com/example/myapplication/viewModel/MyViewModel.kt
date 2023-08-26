@@ -61,6 +61,9 @@ class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
     fun save(news: News) = viewModelScope.launch (Dispatchers.IO) {
         newsRepository.insertNews(news)
     }
+    fun delete(news: News) = viewModelScope.launch (Dispatchers.IO) {
+        newsRepository.deleteNews(news)
+    }
 
     fun getSaveNews() =
         newsRepository.getSaveNews()

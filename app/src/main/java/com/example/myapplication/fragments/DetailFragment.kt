@@ -33,7 +33,7 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModelNewsDetailFragment = (activity as MainActivity).myViewModel
 
-         val news = arguments?.getSerializable("news") as News
+         var news = arguments?.getSerializable("news") as News
         binding.webView.loadUrl(news.url)
 
         binding.imageBack.setOnClickListener{
@@ -41,8 +41,14 @@ class DetailFragment : Fragment() {
         }
 
         binding.floating.setOnClickListener{
-            viewModelNewsDetailFragment.save(news)
-            Toast.makeText(requireContext(), "News saved!", Toast.LENGTH_SHORT).show()
+            if (news.isSaved){
+                viewModelNewsDetailFragment.delete(news)
+                Toast.makeText(requireContext(), "News deleted!", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModelNewsDetailFragment.save(news)
+                news.isSaved = true
+                Toast.makeText(requireContext(), "News saved!", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

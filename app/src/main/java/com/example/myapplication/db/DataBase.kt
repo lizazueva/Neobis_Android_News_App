@@ -10,7 +10,7 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.model.News
 
 
-@Database(entities = [News::class], version = 2)
+@Database(entities = [News::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class DataBase: RoomDatabase() {
     abstract fun getDao(): Dao
