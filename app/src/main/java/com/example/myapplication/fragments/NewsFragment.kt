@@ -56,6 +56,7 @@ class NewsFragment : Fragment(){
             findNavController().navigate(action)
         }
 
+
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -74,6 +75,7 @@ class NewsFragment : Fragment(){
             }
         })
     }
+
 
 
     private fun reload(){

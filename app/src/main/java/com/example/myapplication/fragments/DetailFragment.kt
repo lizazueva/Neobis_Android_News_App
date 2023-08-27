@@ -49,6 +49,7 @@ class DetailFragment : Fragment() {
                 news.isSaved = true
                 Toast.makeText(requireContext(), "News saved!", Toast.LENGTH_SHORT).show()
             }
+            (activity as MainActivity).myViewModel.updateLikeStatus(news)
         }
 
     }

@@ -16,4 +16,5 @@ class NewsRepository(val context: Context): ViewModel() {
        fun getSaveNews() = dao.getAllNews()
        suspend fun insertNews(news: News)= dao.insert(news)
        fun deleteNews(news: News)= dao.deleteNews(news)
+       suspend fun update(news: News) = dao.update(news)
 }

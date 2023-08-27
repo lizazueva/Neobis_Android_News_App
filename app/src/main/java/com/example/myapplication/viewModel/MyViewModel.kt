@@ -65,6 +65,11 @@ class MyViewModel(private var newsRepository: NewsRepository): ViewModel() {
         newsRepository.deleteNews(news)
     }
 
+
     fun getSaveNews() =
         newsRepository.getSaveNews()
+
+    fun updateLikeStatus(news: News) = viewModelScope.launch(Dispatchers.IO) {
+            newsRepository.update(news)
+    }
 }

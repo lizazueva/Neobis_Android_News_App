@@ -14,8 +14,10 @@
         android:layout_margin="16dp"
         android:background="@android:color/transparent"
         android:onClick="onButtonClick"
+        app:backgroundTint="@color/white"
         app:layout_anchor="@id/web_view"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_like"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
