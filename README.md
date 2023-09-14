@@ -24,13 +24,12 @@
     - Entity(таблицы), primary keys, column info
     - Database(getting access to your database, migration, etc)
  - Архитектура ViewModel
-    - Что это за архитектура и чем она отличается от MVP
     - LiveData и MutableLiveData
 - REST API
     - Queries(POST, GET, PUT, DELETE)
     - Server Response
     - JSON and GSON
-- Для реализации запросов в приложении вы будете использовать библиотеку Retrofit.
+-  Retrofit
 - DiffUtils для быстрого обновления RecyclerView
 Установлен слушатель для кнопкок с помощью setOnClickListener и On Item Click.
 
